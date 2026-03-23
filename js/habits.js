@@ -24,6 +24,20 @@
     }
   }
 
+  // Cuenta cuántos días diferentes fue completado el hábito.
+  function getCompletedDaysCount(habit) {
+    return habit.completedDates.length;
+  }
+
+  // Devuelve la fecha más reciente en la que se completó el hábito.
+  function getLastCompletedDate(habit) {
+    if (habit.completedDates.length === 0) {
+      return 'Aún no completado';
+    }
+
+    return habit.completedDates.slice().sort().pop();
+  }
+
   // Genera el HTML de una tarjeta de hábito.
   function createHabitCard(habit) {
     var completedToday = isHabitCompletedToday(habit);
@@ -31,7 +45,8 @@
     var statusText = completedToday ? 'Completado hoy' : 'Pendiente hoy';
     var buttonText = completedToday ? 'Completado hoy' : 'Marcar como completado';
     var buttonDisabled = completedToday ? 'disabled' : '';
-    var progressText = habit.completedDates.length + ' días completados';
+    var completedDaysText = getCompletedDaysCount(habit) + ' días completados';
+    var lastCompletedText = getLastCompletedDate(habit);
 
     return [
       '<article class="habit-card" data-id="' + habit.id + '">',
@@ -44,12 +59,12 @@
       '  </div>',
       '  <div class="habit-card-bottom">',
       '    <div class="metric-box">',
-      '      <span>Progreso</span>',
-      '      <strong>' + progressText + '</strong>',
+      '      <span>Total completado</span>',
+      '      <strong>' + completedDaysText + '</strong>',
       '    </div>',
       '    <div class="metric-box">',
-      '      <span>Racha</span>',
-      '      <strong>' + habit.completedDates.length + ' días seguidos</strong>',
+      '      <span>Última vez</span>',
+      '      <strong>' + lastCompletedText + '</strong>',
       '    </div>',
       '  </div>',
       '  <button class="complete-button" data-action="complete-today" ' + buttonDisabled + '>',
@@ -73,6 +88,8 @@
     createHabit: createHabit,
     createHabitCard: createHabitCard,
     isHabitCompletedToday: isHabitCompletedToday,
-    markHabitAsCompletedToday: markHabitAsCompletedToday
+    markHabitAsCompletedToday: markHabitAsCompletedToday,
+    getCompletedDaysCount: getCompletedDaysCount,
+    getLastCompletedDate: getLastCompletedDate
   };
 })();
