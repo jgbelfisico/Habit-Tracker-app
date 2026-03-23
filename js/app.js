@@ -1,10 +1,15 @@
 (function () {
-  var habits = [];
+  var habits = window.storageUtils.loadHabits();
 
   var form = document.getElementById('habit-form');
   var input = document.getElementById('habit-name');
   var message = document.getElementById('form-message');
   var listElement = document.getElementById('habit-list');
+
+  // Guarda el estado actual para que siga disponible al recargar.
+  function saveHabits() {
+    window.storageUtils.saveHabits(habits);
+  }
 
   // Dibuja la lista actual de hábitos.
   function renderHabits() {
@@ -59,6 +64,7 @@
     var newHabit = window.habitsUtils.createHabit(name);
     habits.push(newHabit);
 
+    saveHabits();
     renderHabits();
     showMessage('Hábito agregado correctamente.', false);
     form.reset();
@@ -81,6 +87,7 @@
     }
 
     window.habitsUtils.markHabitAsCompletedToday(habit);
+    saveHabits();
     renderHabits();
     showMessage('Marcaste el hábito como completado hoy.', false);
   }
