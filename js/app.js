@@ -13,12 +13,32 @@
 
   var habits = window.storageUtils.loadHabits();
   var currentFilter = 'all';
+  var filterHandlers = {
+    all: function () {
+      return habits;
+    },
+    completed: function () {
+      return habits.filter(window.habitsUtils.isHabitCompletedToday);
+    },
+    pending: function () {
+      return habits.filter(function (habit) {
+        return !window.habitsUtils.isHabitCompletedToday(habit);
+      });
+    }
+  };
 
   applyTheme(window.storageUtils.loadTheme());
 
   // Guarda el estado actual para que siga disponible al recargar.
   function saveHabits() {
     window.storageUtils.saveHabits(habits);
+  }
+
+  // Guarda, renderiza y muestra un mensaje de éxito.
+  function commitChanges(successMessage) {
+    saveHabits();
+    renderHabits();
+    showMessage(successMessage, false);
   }
 
   // Muestra un mensaje simple debajo del formulario.
@@ -48,17 +68,22 @@
 
   // Devuelve la lista según el filtro activo.
   function getFilteredHabits() {
-    if (currentFilter === 'completed') {
-      return habits.filter(window.habitsUtils.isHabitCompletedToday);
-    }
+    return filterHandlers[currentFilter]();
+  }
 
-    if (currentFilter === 'pending') {
-      return habits.filter(function (habit) {
-        return !window.habitsUtils.isHabitCompletedToday(habit);
-      });
-    }
+  // Devuelve el mensaje correcto para el estado vacío actual.
+  function getEmptyStateHtml() {
+    var title = currentFilter === 'all' ? 'Aún no tienes hábitos creados.' : 'No hay hábitos para este filtro.';
+    var description = currentFilter === 'all'
+      ? 'Agrega el primero usando el formulario.'
+      : 'Prueba con otro filtro o agrega un nuevo hábito.';
 
-    return habits;
+    return [
+      '<div class="empty-state">',
+      '  <p>' + title + '</p>',
+      '  <p>' + description + '</p>',
+      '</div>'
+    ].join('');
   }
 
   // Marca visualmente el botón del filtro activo.
@@ -76,12 +101,7 @@
     var visibleHabits = getFilteredHabits();
 
     if (visibleHabits.length === 0) {
-      listElement.innerHTML = [
-        '<div class="empty-state">',
-        '  <p>No hay hábitos para este filtro.</p>',
-        '  <p>Prueba con otro filtro o agrega un nuevo hábito.</p>',
-        '</div>'
-      ].join('');
+      listElement.innerHTML = getEmptyStateHtml();
       updateFilterButtons();
       return;
     }
@@ -114,12 +134,8 @@
       return;
     }
 
-    var newHabit = window.habitsUtils.createHabit(name);
-    habits.push(newHabit);
-
-    saveHabits();
-    renderHabits();
-    showMessage('Hábito agregado correctamente.', false);
+    habits.push(window.habitsUtils.createHabit(name));
+    commitChanges('Hábito agregado correctamente.');
     form.reset();
     input.focus();
   }
@@ -139,9 +155,7 @@
     }
 
     habit.name = validName;
-    saveHabits();
-    renderHabits();
-    showMessage('Nombre del hábito actualizado.', false);
+    commitChanges('Nombre del hábito actualizado.');
   }
 
   // Elimina un hábito después de confirmar la acción.
@@ -156,9 +170,25 @@
       return String(habit.id) !== String(habitId);
     });
 
-    saveHabits();
-    renderHabits();
-    showMessage('Hábito eliminado.', false);
+    commitChanges('Hábito eliminado.');
+  }
+
+  // Ejecuta la acción asociada al botón pulsado.
+  function runHabitAction(action, habit) {
+    if (action === 'complete-today') {
+      window.habitsUtils.markHabitAsCompletedToday(habit);
+      commitChanges('Marcaste el hábito como completado hoy.');
+      return;
+    }
+
+    if (action === 'edit-habit') {
+      editHabit(habit);
+      return;
+    }
+
+    if (action === 'delete-habit') {
+      deleteHabit(habit.id);
+    }
   }
 
   // Responde a los botones dentro de cada tarjeta.
@@ -181,22 +211,7 @@
       return;
     }
 
-    if (actionButton.dataset.action === 'complete-today') {
-      window.habitsUtils.markHabitAsCompletedToday(habit);
-      saveHabits();
-      renderHabits();
-      showMessage('Marcaste el hábito como completado hoy.', false);
-      return;
-    }
-
-    if (actionButton.dataset.action === 'edit-habit') {
-      editHabit(habit);
-      return;
-    }
-
-    if (actionButton.dataset.action === 'delete-habit') {
-      deleteHabit(habit.id);
-    }
+    runHabitAction(actionButton.dataset.action, habit);
   }
 
   // Cambia el filtro visible de hábitos.

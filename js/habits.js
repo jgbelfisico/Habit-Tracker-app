@@ -58,10 +58,11 @@
   // Calcula una racha actual sencilla contando días consecutivos hasta hoy.
   function getCurrentStreak(habit) {
     var completedDates = getUniqueCompletedDates(habit);
+    var completedDatesSet = new Set(completedDates);
     var streak = 0;
     var currentDate = window.dateUtils.getToday();
 
-    while (completedDates.includes(currentDate)) {
+    while (completedDatesSet.has(currentDate)) {
       streak += 1;
       currentDate = window.dateUtils.shiftDate(currentDate, -1);
     }
@@ -72,6 +73,16 @@
   // Devuelve las fechas completadas para mostrarlas como historial.
   function getHistoryDates(habit) {
     return getUniqueCompletedDates(habit).slice().reverse();
+  }
+
+  // Genera una caja de texto simple para métricas.
+  function createMetricBox(label, value) {
+    return [
+      '<div class="metric-box">',
+      '  <span>' + label + '</span>',
+      '  <strong>' + value + '</strong>',
+      '</div>'
+    ].join('');
   }
 
   // Genera el HTML de una tarjeta de hábito.
@@ -95,14 +106,8 @@
       '    <span class="status-badge ' + statusClass + '">' + statusText + '</span>',
       '  </div>',
       '  <div class="habit-card-bottom">',
-      '    <div class="metric-box">',
-      '      <span>Racha actual</span>',
-      '      <strong>' + streakText + '</strong>',
-      '    </div>',
-      '    <div class="metric-box">',
-      '      <span>Última vez</span>',
-      '      <strong>' + lastCompletedText + '</strong>',
-      '    </div>',
+      createMetricBox('Racha actual', streakText),
+      createMetricBox('Última vez', lastCompletedText),
       '  </div>',
       '  <div class="card-actions">',
       '    <button class="complete-button" data-action="complete-today" ' + buttonDisabled + '>',

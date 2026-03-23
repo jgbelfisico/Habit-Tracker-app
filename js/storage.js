@@ -34,15 +34,19 @@
     return localStorage.getItem(THEME_STORAGE_KEY) || 'light';
   }
 
+  // Deja el historial con fechas ordenadas y sin repetir.
+  function normalizeCompletedDates(completedDates) {
+    var safeCompletedDates = Array.isArray(completedDates) ? completedDates : [];
+    return Array.from(new Set(safeCompletedDates)).sort();
+  }
+
   // Asegura que cada hábito tenga la forma esperada.
   function normalizeHabit(habit) {
-    var completedDates = Array.isArray(habit.completedDates) ? habit.completedDates : [];
-
     return {
       id: habit.id || 'habit-' + Date.now(),
       name: typeof habit.name === 'string' ? habit.name.trim() : '',
       createdAt: habit.createdAt || window.dateUtils.getToday(),
-      completedDates: Array.from(new Set(completedDates)).sort()
+      completedDates: normalizeCompletedDates(habit.completedDates)
     };
   }
 
