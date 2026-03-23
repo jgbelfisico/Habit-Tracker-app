@@ -4,26 +4,28 @@ Aplicación web básica para registrar hábitos diarios usando HTML, CSS y JavaS
 
 ## Estado actual
 
-El proyecto se encuentra en la fase 7. Ya permite:
+La aplicación ya permite:
 
-- escribir el nombre de un hábito
-- agregar el hábito desde el formulario
-- validar que el nombre no esté vacío
-- mostrar cada hábito en una tarjeta
+- crear hábitos
+- editar el nombre de un hábito existente
+- eliminar hábitos
 - marcar un hábito como completado hoy
 - evitar duplicar la misma fecha en un hábito
 - guardar hábitos en `localStorage`
 - recuperar hábitos al recargar la página
-- mostrar una métrica simple basada en días completados
+- filtrar hábitos por todos, completados hoy o pendientes hoy
+- mostrar una racha real de días consecutivos
+- mostrar un historial simple de fechas completadas
+- cambiar entre modo claro y oscuro
 
 ## Estructura del proyecto
 
-- `index.html`: estructura principal de la interfaz y contenedor general de la app.
-- `css/styles.css`: estilos del layout, formulario, tarjetas, botones, mensajes y diseño responsive.
-- `js/app.js`: conexión entre formulario, estado en memoria, persistencia y renderizado de la lista.
-- `js/habits.js`: funciones sencillas para crear hábitos, revisar si hoy ya fue completado y calcular la métrica simple de progreso.
-- `js/storage.js`: lectura y escritura de hábitos en `localStorage`, con normalización básica de datos.
-- `js/date-utils.js`: utilidades simples para manejar la fecha actual.
+- `index.html`: estructura principal de la interfaz, formulario, filtros, lista y botón de tema.
+- `css/styles.css`: estilos del layout, responsive básico, tarjetas, acciones, filtros y modo oscuro.
+- `js/app.js`: coordinación de eventos, renderizado, edición, eliminación, filtros y tema.
+- `js/habits.js`: lógica de hábitos, racha actual, historial y renderizado de tarjetas.
+- `js/storage.js`: persistencia de hábitos y del tema en `localStorage`.
+- `js/date-utils.js`: utilidades simples para manejar fechas.
 
 ## Cómo abrirlo localmente
 

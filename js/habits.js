@@ -55,6 +55,25 @@
     return completedDates[completedDates.length - 1];
   }
 
+  // Calcula una racha actual sencilla contando días consecutivos hasta hoy.
+  function getCurrentStreak(habit) {
+    var completedDates = getUniqueCompletedDates(habit);
+    var streak = 0;
+    var currentDate = window.dateUtils.getToday();
+
+    while (completedDates.includes(currentDate)) {
+      streak += 1;
+      currentDate = window.dateUtils.shiftDate(currentDate, -1);
+    }
+
+    return streak;
+  }
+
+  // Devuelve las fechas completadas para mostrarlas como historial.
+  function getHistoryDates(habit) {
+    return getUniqueCompletedDates(habit).slice().reverse();
+  }
+
   // Genera el HTML de una tarjeta de hábito.
   function createHabitCard(habit) {
     var completedToday = isHabitCompletedToday(habit);
@@ -62,8 +81,9 @@
     var statusText = completedToday ? 'Completado hoy' : 'Pendiente hoy';
     var buttonText = completedToday ? 'Completado hoy' : 'Marcar como completado';
     var buttonDisabled = completedToday ? 'disabled' : '';
-    var completedDaysText = getCompletedDaysCount(habit) + ' días completados';
+    var streakText = getCurrentStreak(habit) + ' días seguidos';
     var lastCompletedText = getLastCompletedDate(habit);
+    var historyHtml = createHistoryHtml(habit);
 
     return [
       '<article class="habit-card" data-id="' + habit.id + '">',
@@ -76,18 +96,45 @@
       '  </div>',
       '  <div class="habit-card-bottom">',
       '    <div class="metric-box">',
-      '      <span>Total completado</span>',
-      '      <strong>' + completedDaysText + '</strong>',
+      '      <span>Racha actual</span>',
+      '      <strong>' + streakText + '</strong>',
       '    </div>',
       '    <div class="metric-box">',
       '      <span>Última vez</span>',
       '      <strong>' + lastCompletedText + '</strong>',
       '    </div>',
       '  </div>',
-      '  <button class="complete-button" data-action="complete-today" ' + buttonDisabled + '>',
-      '    ' + buttonText,
-      '  </button>',
+      '  <div class="card-actions">',
+      '    <button class="complete-button" data-action="complete-today" ' + buttonDisabled + '>',
+      '      ' + buttonText,
+      '    </button>',
+      '    <button class="card-action" data-action="edit-habit" type="button">Editar nombre</button>',
+      '    <button class="card-action is-danger" data-action="delete-habit" type="button">Eliminar</button>',
+      '  </div>',
+      '  <div class="history-box">',
+      '    <span class="history-title">Historial</span>',
+      historyHtml,
+      '  </div>',
       '</article>'
+    ].join('');
+  }
+
+  // Genera una lista simple con las fechas completadas.
+  function createHistoryHtml(habit) {
+    var historyDates = getHistoryDates(habit);
+
+    if (historyDates.length === 0) {
+      return '<span class="history-empty">Todavía no hay días completados.</span>';
+    }
+
+    return [
+      '<ul class="history-list">',
+      historyDates
+        .map(function (date) {
+          return '<li>' + date + '</li>';
+        })
+        .join(''),
+      '</ul>'
     ].join('');
   }
 
@@ -107,6 +154,8 @@
     isHabitCompletedToday: isHabitCompletedToday,
     markHabitAsCompletedToday: markHabitAsCompletedToday,
     getCompletedDaysCount: getCompletedDaysCount,
-    getLastCompletedDate: getLastCompletedDate
+    getCurrentStreak: getCurrentStreak,
+    getLastCompletedDate: getLastCompletedDate,
+    getHistoryDates: getHistoryDates
   };
 })();

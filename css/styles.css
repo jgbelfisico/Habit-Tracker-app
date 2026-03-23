@@ -16,6 +16,23 @@
   --shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
 }
 
+body.dark-mode {
+  color-scheme: dark;
+  --bg: #0f172a;
+  --surface: #111827;
+  --surface-muted: #1e293b;
+  --text: #e5e7eb;
+  --text-soft: #94a3b8;
+  --border: #334155;
+  --primary: #818cf8;
+  --primary-soft: #312e81;
+  --success: #4ade80;
+  --success-soft: #14532d;
+  --danger: #fca5a5;
+  --danger-soft: #7f1d1d;
+  --shadow: 0 18px 45px rgba(2, 6, 23, 0.45);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -27,6 +44,7 @@ body {
     radial-gradient(circle at top, rgba(79, 70, 229, 0.12), transparent 30%),
     var(--bg);
   color: var(--text);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 button,
@@ -55,10 +73,15 @@ button {
 
 .hero-card {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
   gap: 24px;
   padding: 32px;
   margin-bottom: 24px;
+}
+
+.hero-actions {
+  display: grid;
+  gap: 16px;
 }
 
 .eyebrow {
@@ -80,7 +103,10 @@ button {
 
 .hero-copy p,
 .panel-heading p,
-.summary-note {
+.summary-note,
+.history-list li,
+.empty-state,
+.history-empty {
   margin: 0;
   color: var(--text-soft);
   line-height: 1.6;
@@ -114,6 +140,30 @@ button {
   line-height: 1;
 }
 
+.theme-toggle,
+.filter-button,
+.card-action,
+.complete-button {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.theme-toggle,
+.filter-button,
+.card-action {
+  background: var(--surface-muted);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.filter-button.is-active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
 .panel-grid {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
@@ -128,9 +178,23 @@ button {
   margin-bottom: 20px;
 }
 
+.panel-heading-inline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .panel-heading h2 {
   margin: 0 0 8px;
   font-size: 1.3rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .habit-form {
@@ -153,7 +217,7 @@ button {
   padding: 0 16px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fbfdff;
+  background: var(--surface);
   color: var(--text);
 }
 
@@ -162,13 +226,16 @@ button {
   border-color: var(--primary);
 }
 
+.input-row button,
+.complete-button {
+  background: var(--primary);
+  color: #ffffff;
+}
+
 .input-row button {
   min-height: 52px;
   padding: 0 18px;
   border-radius: 14px;
-  background: var(--primary);
-  color: #ffffff;
-  font-weight: 700;
 }
 
 .form-message {
@@ -191,9 +258,8 @@ button {
   padding: 24px;
   border: 1px dashed var(--border);
   border-radius: 18px;
-  background: #fbfcfe;
+  background: var(--surface);
   text-align: center;
-  color: var(--text-soft);
 }
 
 .habit-card {
@@ -202,7 +268,7 @@ button {
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: 18px;
-  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-muted) 100%);
 }
 
 .habit-card-top {
@@ -217,7 +283,8 @@ button {
   font-size: 1.05rem;
 }
 
-.habit-card p {
+.habit-card p,
+.history-title {
   margin: 0;
   color: var(--text-soft);
 }
@@ -243,20 +310,23 @@ button {
   color: var(--primary);
 }
 
-.habit-card-bottom {
+.habit-card-bottom,
+.card-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.metric-box {
+.metric-box,
+.history-box {
   padding: 14px;
   border-radius: 16px;
-  background: #f8fafc;
-  border: 1px solid #e6edf7;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
-.metric-box span {
+.metric-box span,
+.history-title {
   display: block;
   margin-bottom: 6px;
   color: var(--text-soft);
@@ -267,13 +337,10 @@ button {
   font-size: 1.1rem;
 }
 
-.complete-button {
-  min-height: 48px;
-  padding: 0 18px;
-  border-radius: 14px;
-  background: #eef2ff;
-  color: var(--primary);
-  font-weight: 700;
+.card-action.is-danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: transparent;
 }
 
 .complete-button:disabled {
@@ -282,10 +349,27 @@ button {
   cursor: default;
 }
 
+.history-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.history-empty {
+  display: block;
+}
+
 @media (max-width: 860px) {
   .hero-card,
   .panel-grid {
     grid-template-columns: 1fr;
+  }
+
+  .panel-heading-inline {
+    flex-direction: column;
+  }
+
+  .filters {
+    justify-content: flex-start;
   }
 }
 
@@ -302,7 +386,8 @@ button {
   }
 
   .habit-card-top,
-  .habit-card-bottom {
+  .habit-card-bottom,
+  .card-actions {
     display: grid;
     grid-template-columns: 1fr;
   }

@@ -1,15 +1,16 @@
 (function () {
-  var STORAGE_KEY = 'habit-tracker-habits';
+  var HABITS_STORAGE_KEY = 'habit-tracker-habits';
+  var THEME_STORAGE_KEY = 'habit-tracker-theme';
 
   // Guarda la lista completa de hábitos en localStorage.
   function saveHabits(habits) {
     var habitsJson = JSON.stringify(habits);
-    localStorage.setItem(STORAGE_KEY, habitsJson);
+    localStorage.setItem(HABITS_STORAGE_KEY, habitsJson);
   }
 
   // Carga la lista guardada y devuelve un arreglo listo para usar.
   function loadHabits() {
-    var savedHabits = localStorage.getItem(STORAGE_KEY);
+    var savedHabits = localStorage.getItem(HABITS_STORAGE_KEY);
 
     if (!savedHabits) {
       return [];
@@ -18,9 +19,19 @@
     try {
       return JSON.parse(savedHabits).map(normalizeHabit);
     } catch (error) {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(HABITS_STORAGE_KEY);
       return [];
     }
+  }
+
+  // Guarda el tema actual del usuario.
+  function saveTheme(theme) {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }
+
+  // Recupera el tema guardado o devuelve el tema claro por defecto.
+  function loadTheme() {
+    return localStorage.getItem(THEME_STORAGE_KEY) || 'light';
   }
 
   // Asegura que cada hábito tenga la forma esperada.
@@ -37,6 +48,8 @@
 
   window.storageUtils = {
     saveHabits: saveHabits,
-    loadHabits: loadHabits
+    loadHabits: loadHabits,
+    saveTheme: saveTheme,
+    loadTheme: loadTheme
   };
 })();
