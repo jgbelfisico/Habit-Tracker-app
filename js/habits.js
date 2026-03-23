@@ -1,20 +1,37 @@
 (function () {
-  // Crea un hábito nuevo con valores iniciales sencillos.
+  // Crea un hábito nuevo con los datos mínimos para esta fase.
   function createHabit(name) {
     return {
       id: Date.now(),
       name: name,
-      completedToday: false,
-      totalCompletions: 0,
-      createdAt: window.dateUtils.getToday()
+      createdAt: window.dateUtils.getToday(),
+      completedDates: []
     };
+  }
+
+  // Indica si el hábito ya fue completado en la fecha actual.
+  function isHabitCompletedToday(habit) {
+    var today = window.dateUtils.getToday();
+    return habit.completedDates.includes(today);
+  }
+
+  // Marca el hábito para hoy sin repetir la misma fecha.
+  function markHabitAsCompletedToday(habit) {
+    var today = window.dateUtils.getToday();
+
+    if (!habit.completedDates.includes(today)) {
+      habit.completedDates.push(today);
+    }
   }
 
   // Genera el HTML de una tarjeta de hábito.
   function createHabitCard(habit) {
-    var statusClass = habit.completedToday ? 'is-complete' : 'is-pending';
-    var statusText = habit.completedToday ? 'Completado hoy' : 'Pendiente hoy';
-    var progressText = habit.totalCompletions + ' días completados';
+    var completedToday = isHabitCompletedToday(habit);
+    var statusClass = completedToday ? 'is-complete' : 'is-pending';
+    var statusText = completedToday ? 'Completado hoy' : 'Pendiente hoy';
+    var buttonText = completedToday ? 'Completado hoy' : 'Marcar como completado';
+    var buttonDisabled = completedToday ? 'disabled' : '';
+    var progressText = habit.completedDates.length + ' días completados';
 
     return [
       '<article class="habit-card" data-id="' + habit.id + '">',
@@ -32,9 +49,12 @@
       '    </div>',
       '    <div class="metric-box">',
       '      <span>Racha</span>',
-      '      <strong>0 días seguidos</strong>',
+      '      <strong>' + habit.completedDates.length + ' días seguidos</strong>',
       '    </div>',
       '  </div>',
+      '  <button class="complete-button" data-action="complete-today" ' + buttonDisabled + '>',
+      '    ' + buttonText,
+      '  </button>',
       '</article>'
     ].join('');
   }
@@ -51,6 +71,8 @@
 
   window.habitsUtils = {
     createHabit: createHabit,
-    createHabitCard: createHabitCard
+    createHabitCard: createHabitCard,
+    isHabitCompletedToday: isHabitCompletedToday,
+    markHabitAsCompletedToday: markHabitAsCompletedToday
   };
 })();

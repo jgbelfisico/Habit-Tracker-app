@@ -39,6 +39,13 @@
     return name;
   }
 
+  // Busca un hábito usando su id.
+  function findHabitById(habitId) {
+    return habits.find(function (habit) {
+      return String(habit.id) === String(habitId);
+    });
+  }
+
   // Maneja el envío del formulario para crear hábitos.
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -58,6 +65,27 @@
     input.focus();
   }
 
+  // Marca un hábito como completado en la fecha actual.
+  function handleListClick(event) {
+    var button = event.target.closest('[data-action="complete-today"]');
+
+    if (!button) {
+      return;
+    }
+
+    var habitCard = button.closest('.habit-card');
+    var habit = findHabitById(habitCard.dataset.id);
+
+    if (!habit) {
+      return;
+    }
+
+    window.habitsUtils.markHabitAsCompletedToday(habit);
+    renderHabits();
+    showMessage('Marcaste el hábito como completado hoy.', false);
+  }
+
   form.addEventListener('submit', handleFormSubmit);
+  listElement.addEventListener('click', handleListClick);
   renderHabits();
 })();

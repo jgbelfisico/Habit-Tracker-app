@@ -267,6 +267,21 @@ button {
   font-size: 1.1rem;
 }
 
+.complete-button {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 14px;
+  background: #eef2ff;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.complete-button:disabled {
+  background: var(--success-soft);
+  color: var(--success);
+  cursor: default;
+}
+
 @media (max-width: 860px) {
   .hero-card,
   .panel-grid {
