@@ -2,24 +2,34 @@
 
 Aplicación web básica para registrar hábitos diarios usando HTML, CSS y JavaScript puro, sin frameworks ni backend.
 
-## Estructura base
+## Estado actual
 
-- `index.html`: punto de entrada de la aplicación y contenedor principal.
-- `css/styles.css`: estilos base de la interfaz.
-- `js/app.js`: archivo principal para iniciar la aplicación.
-- `js/habits.js`: módulo reservado para la lógica de hábitos.
-- `js/storage.js`: módulo reservado para la persistencia con `localStorage`.
-- `js/date-utils.js`: utilidades para manejar fechas de forma simple.
+El proyecto se encuentra en una fase inicial de interfaz visual. Ya incluye:
+
+- encabezado principal
+- formulario base para escribir un hábito
+- tarjetas visuales para mostrar hábitos
+- indicador visual de completado hoy
+- espacio para mostrar progreso y racha simple
+
+## Estructura del proyecto
+
+- `index.html`: estructura principal de la interfaz y contenedor general de la app.
+- `css/styles.css`: estilos del layout, responsive básico y apariencia de tarjetas, formulario y métricas.
+- `js/app.js`: renderizado visual inicial de hábitos de ejemplo para mostrar la estructura en pantalla.
+- `js/habits.js`: reservado para la lógica de hábitos en próximas fases.
+- `js/storage.js`: reservado para la persistencia con `localStorage`.
+- `js/date-utils.js`: reservado para utilidades de fecha.
 
 ## Cómo abrirlo localmente
 
 1. Descarga o clona este repositorio.
 2. Abre el archivo `index.html` directamente en tu navegador.
 
-También puedes usar un servidor local simple si lo prefieres, por ejemplo:
+Si prefieres usar un servidor local simple:
 
 ```bash
 python3 -m http.server
 ```
 
-Luego abre `http://localhost:8000` en tu navegador.
+Después abre `http://localhost:8000` en tu navegador.
