@@ -11,6 +11,8 @@
   --primary-soft: #e0e7ff;
   --success: #15803d;
   --success-soft: #dcfce7;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
   --shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
 }
 
@@ -169,9 +171,29 @@ button {
   font-weight: 700;
 }
 
+.form-message {
+  min-height: 24px;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.form-message.is-error {
+  color: var(--danger);
+}
+
 .habit-list {
   display: grid;
   gap: 16px;
+}
+
+.empty-state {
+  padding: 24px;
+  border: 1px dashed var(--border);
+  border-radius: 18px;
+  background: #fbfcfe;
+  text-align: center;
+  color: var(--text-soft);
 }
 
 .habit-card {
@@ -266,8 +288,8 @@ button {
 
   .habit-card-top,
   .habit-card-bottom {
-    grid-template-columns: 1fr;
     display: grid;
+    grid-template-columns: 1fr;
   }
 
   .status-badge {

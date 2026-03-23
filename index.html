@@ -11,17 +11,17 @@
       <section class="hero-card">
         <div class="hero-copy">
           <span class="eyebrow">Habit Tracker</span>
-          <h1>Organiza tus hábitos diarios con una interfaz simple.</h1>
+          <h1>Empieza a construir tu lista de hábitos diarios.</h1>
           <p>
-            Esta fase se enfoca en la estructura visual: formulario, tarjetas de hábitos
-            e indicadores básicos para progreso y estado diario.
+            En esta fase ya puedes escribir un hábito, agregarlo a la lista y ver su
+            estado inicial de seguimiento.
           </p>
         </div>
 
         <div class="hero-summary" aria-label="Resumen visual del progreso">
-          <p class="summary-label">Progreso semanal</p>
-          <strong class="summary-value">5 / 7 días</strong>
-          <span class="summary-note">Diseño inicial para mostrar métricas simples.</span>
+          <p class="summary-label">Estado inicial</p>
+          <strong class="summary-value">Fase 3</strong>
+          <span class="summary-note">Creación de hábitos con una interfaz simple y clara.</span>
         </div>
       </section>
 
@@ -29,7 +29,7 @@
         <section class="panel form-panel" aria-labelledby="habit-form-title">
           <div class="panel-heading">
             <h2 id="habit-form-title">Agregar hábito</h2>
-            <p>Escribe un nombre corto y prepáralo para el seguimiento diario.</p>
+            <p>Escribe el nombre de un hábito y agrégalo a tu lista diaria.</p>
           </div>
 
           <form class="habit-form" id="habit-form">
@@ -44,13 +44,14 @@
               />
               <button type="submit">Agregar hábito</button>
             </div>
+            <p class="form-message" id="form-message" aria-live="polite"></p>
           </form>
         </section>
 
         <section class="panel list-panel" aria-labelledby="habit-list-title">
           <div class="panel-heading">
             <h2 id="habit-list-title">Tus hábitos</h2>
-            <p>Vista previa del diseño de lista y tarjetas para las próximas fases.</p>
+            <p>Cada hábito muestra su nombre, su estado de hoy y una métrica simple.</p>
           </div>
 
           <div class="habit-list" id="habit-list"></div>

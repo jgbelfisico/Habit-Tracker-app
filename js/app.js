@@ -1,77 +1,63 @@
 (function () {
-  var previewHabits = [
-    {
-      name: 'Beber agua',
-      description: 'Recordatorio simple para mantener constancia diaria.',
-      completedToday: true,
-      streak: 'Racha actual: 4 días',
-      progress: 'Completado 12 veces'
-    },
-    {
-      name: 'Leer 15 minutos',
-      description: 'Hábito pensado para una rutina corta y fácil de sostener.',
-      completedToday: false,
-      streak: 'Racha actual: 0 días',
-      progress: 'Completado 6 veces'
-    },
-    {
-      name: 'Caminar después de almorzar',
-      description: 'Ejemplo de tarjeta con espacio para estado y progreso.',
-      completedToday: true,
-      streak: 'Racha actual: 7 días',
-      progress: 'Completado 18 veces'
-    }
-  ];
+  var habits = [];
 
-  function createHabitCard(habit) {
-    var statusClass = habit.completedToday ? 'is-complete' : 'is-pending';
-    var statusText = habit.completedToday ? 'Completado hoy' : 'Pendiente hoy';
+  var form = document.getElementById('habit-form');
+  var input = document.getElementById('habit-name');
+  var message = document.getElementById('form-message');
+  var listElement = document.getElementById('habit-list');
 
-    return [
-      '<article class="habit-card">',
-      '  <div class="habit-card-top">',
-      '    <div>',
-      '      <h3>' + habit.name + '</h3>',
-      '      <p>' + habit.description + '</p>',
-      '    </div>',
-      '    <span class="status-badge ' + statusClass + '">' + statusText + '</span>',
-      '  </div>',
-      '  <div class="habit-card-bottom">',
-      '    <div class="metric-box">',
-      '      <span>Progreso</span>',
-      '      <strong>' + habit.progress + '</strong>',
-      '    </div>',
-      '    <div class="metric-box">',
-      '      <span>Racha</span>',
-      '      <strong>' + habit.streak + '</strong>',
-      '    </div>',
-      '  </div>',
-      '</article>'
-    ].join('');
-  }
-
-  function renderPreview() {
-    var listElement = document.getElementById('habit-list');
-
-    if (!listElement) {
+  // Dibuja la lista actual de hábitos.
+  function renderHabits() {
+    if (habits.length === 0) {
+      listElement.innerHTML = [
+        '<div class="empty-state">',
+        '  <p>Aún no tienes hábitos creados.</p>',
+        '  <p>Agrega el primero usando el formulario.</p>',
+        '</div>'
+      ].join('');
       return;
     }
 
-    listElement.innerHTML = previewHabits.map(createHabitCard).join('');
+    listElement.innerHTML = habits.map(window.habitsUtils.createHabitCard).join('');
   }
 
-  function bindFormPreview() {
-    var form = document.getElementById('habit-form');
+  // Muestra un mensaje simple debajo del formulario.
+  function showMessage(text, isError) {
+    message.textContent = text;
+    message.classList.toggle('is-error', Boolean(isError));
+  }
 
-    if (!form) {
+  // Limpia espacios y valida que el nombre no esté vacío.
+  function getValidHabitName() {
+    var name = input.value.trim();
+
+    if (!name) {
+      showMessage('Escribe un nombre para el hábito.', true);
+      return null;
+    }
+
+    return name;
+  }
+
+  // Maneja el envío del formulario para crear hábitos.
+  function handleFormSubmit(event) {
+    event.preventDefault();
+
+    var name = getValidHabitName();
+
+    if (!name) {
       return;
     }
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-    });
+    var newHabit = window.habitsUtils.createHabit(name);
+    habits.push(newHabit);
+
+    renderHabits();
+    showMessage('Hábito agregado correctamente.', false);
+    form.reset();
+    input.focus();
   }
 
-  renderPreview();
-  bindFormPreview();
+  form.addEventListener('submit', handleFormSubmit);
+  renderHabits();
 })();
