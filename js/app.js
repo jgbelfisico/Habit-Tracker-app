@@ -1,10 +1,15 @@
 (function () {
-  var habits = window.storageUtils.loadHabits();
-
   var form = document.getElementById('habit-form');
   var input = document.getElementById('habit-name');
   var message = document.getElementById('form-message');
   var listElement = document.getElementById('habit-list');
+
+  // Si falta algún nodo principal, la app no intenta continuar.
+  if (!form || !input || !message || !listElement) {
+    return;
+  }
+
+  var habits = window.storageUtils.loadHabits();
 
   // Guarda el estado actual para que siga disponible al recargar.
   function saveHabits() {
@@ -80,6 +85,11 @@
     }
 
     var habitCard = button.closest('.habit-card');
+
+    if (!habitCard) {
+      return;
+    }
+
     var habit = findHabitById(habitCard.dataset.id);
 
     if (!habit) {

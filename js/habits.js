@@ -1,8 +1,19 @@
 (function () {
+  // Crea un identificador simple para cada hábito.
+  function createHabitId() {
+    return 'habit-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+  }
+
+  // Devuelve una copia ordenada y sin fechas repetidas.
+  function getUniqueCompletedDates(habit) {
+    var completedDates = Array.isArray(habit.completedDates) ? habit.completedDates : [];
+    return Array.from(new Set(completedDates)).sort();
+  }
+
   // Crea un hábito nuevo con los datos mínimos para esta fase.
   function createHabit(name) {
     return {
-      id: Date.now(),
+      id: createHabitId(),
       name: name,
       createdAt: window.dateUtils.getToday(),
       completedDates: []
@@ -12,30 +23,36 @@
   // Indica si el hábito ya fue completado en la fecha actual.
   function isHabitCompletedToday(habit) {
     var today = window.dateUtils.getToday();
-    return habit.completedDates.includes(today);
+    return getUniqueCompletedDates(habit).includes(today);
   }
 
   // Marca el hábito para hoy sin repetir la misma fecha.
   function markHabitAsCompletedToday(habit) {
     var today = window.dateUtils.getToday();
+    var completedDates = getUniqueCompletedDates(habit);
 
-    if (!habit.completedDates.includes(today)) {
-      habit.completedDates.push(today);
+    if (!completedDates.includes(today)) {
+      completedDates.push(today);
+      completedDates.sort();
     }
+
+    habit.completedDates = completedDates;
   }
 
   // Cuenta cuántos días diferentes fue completado el hábito.
   function getCompletedDaysCount(habit) {
-    return habit.completedDates.length;
+    return getUniqueCompletedDates(habit).length;
   }
 
   // Devuelve la fecha más reciente en la que se completó el hábito.
   function getLastCompletedDate(habit) {
-    if (habit.completedDates.length === 0) {
+    var completedDates = getUniqueCompletedDates(habit);
+
+    if (completedDates.length === 0) {
       return 'Aún no completado';
     }
 
-    return habit.completedDates.slice().sort().pop();
+    return completedDates[completedDates.length - 1];
   }
 
   // Genera el HTML de una tarjeta de hábito.

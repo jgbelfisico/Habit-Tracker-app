@@ -15,16 +15,23 @@
       return [];
     }
 
-    return JSON.parse(savedHabits).map(normalizeHabit);
+    try {
+      return JSON.parse(savedHabits).map(normalizeHabit);
+    } catch (error) {
+      localStorage.removeItem(STORAGE_KEY);
+      return [];
+    }
   }
 
   // Asegura que cada hábito tenga la forma esperada.
   function normalizeHabit(habit) {
+    var completedDates = Array.isArray(habit.completedDates) ? habit.completedDates : [];
+
     return {
-      id: habit.id,
-      name: habit.name || '',
+      id: habit.id || 'habit-' + Date.now(),
+      name: typeof habit.name === 'string' ? habit.name.trim() : '',
       createdAt: habit.createdAt || window.dateUtils.getToday(),
-      completedDates: Array.isArray(habit.completedDates) ? habit.completedDates : []
+      completedDates: Array.from(new Set(completedDates)).sort()
     };
   }
 

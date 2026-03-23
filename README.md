@@ -4,7 +4,7 @@ Aplicación web básica para registrar hábitos diarios usando HTML, CSS y JavaS
 
 ## Estado actual
 
-El proyecto se encuentra en la fase 6. Ya permite:
+El proyecto se encuentra en la fase 7. Ya permite:
 
 - escribir el nombre de un hábito
 - agregar el hábito desde el formulario
@@ -22,7 +22,7 @@ El proyecto se encuentra en la fase 6. Ya permite:
 - `css/styles.css`: estilos del layout, formulario, tarjetas, botones, mensajes y diseño responsive.
 - `js/app.js`: conexión entre formulario, estado en memoria, persistencia y renderizado de la lista.
 - `js/habits.js`: funciones sencillas para crear hábitos, revisar si hoy ya fue completado y calcular la métrica simple de progreso.
-- `js/storage.js`: lectura y escritura de hábitos en `localStorage`.
+- `js/storage.js`: lectura y escritura de hábitos en `localStorage`, con normalización básica de datos.
 - `js/date-utils.js`: utilidades simples para manejar la fecha actual.
 
 ## Cómo abrirlo localmente
