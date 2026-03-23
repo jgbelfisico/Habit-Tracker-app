@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <span class="eyebrow">Habit Tracker</span>
+          <h1>Organiza tus hábitos diarios con seguimiento simple y claro.</h1>
+          <p>
+            Ahora puedes crear hábitos, editarlos, eliminarlos, filtrar su estado,
+            revisar su historial y cambiar entre modo claro y oscuro.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <div class="hero-summary" aria-label="Resumen visual del progreso">
+            <p class="summary-label">Seguimiento diario</p>
+            <strong class="summary-value">Fase final</strong>
+            <span class="summary-note">La app ya incluye filtros, racha real, historial y tema.</span>
+          </div>
+
+          <button class="theme-toggle" id="theme-toggle" type="button">
+            Cambiar tema
+          </button>
+        </div>
+      </section>
+
+      <section class="panel-grid" aria-label="Aplicación de hábitos">
+        <section class="panel form-panel" aria-labelledby="habit-form-title">
+          <div class="panel-heading">
+            <h2 id="habit-form-title">Agregar hábito</h2>
+            <p>Escribe el nombre de un hábito y agrégalo a tu lista diaria.</p>
+          </div>
+
+          <form class="habit-form" id="habit-form">
+            <label class="input-label" for="habit-name">Nombre del hábito</label>
+            <div class="input-row">
+              <input
+                id="habit-name"
+                name="habitName"
+                type="text"
+                placeholder="Ej. Leer 15 minutos"
+                autocomplete="off"
+              />
+              <button type="submit">Agregar hábito</button>
+            </div>
+            <p class="form-message" id="form-message" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="panel list-panel" aria-labelledby="habit-list-title">
+          <div class="panel-heading panel-heading-inline">
+            <div>
+              <h2 id="habit-list-title">Tus hábitos</h2>
+              <p>Cada hábito muestra estado de hoy, racha actual e historial simple.</p>
+            </div>
+
+            <div class="filters" id="filters" aria-label="Filtrar hábitos">
+              <button class="filter-button is-active" data-filter="all" type="button">Todos</button>
+              <button class="filter-button" data-filter="completed" type="button">Completados hoy</button>
+              <button class="filter-button" data-filter="pending" type="button">Pendientes hoy</button>
+            </div>
+          </div>
+
+          <div class="habit-list" id="habit-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="js/date-utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/habits.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
